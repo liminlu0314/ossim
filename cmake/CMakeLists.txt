@@ -112,6 +112,14 @@ IF(BUILD_OSSIM_VIDEO AND EXISTS ${OSSIM_DEV_HOME}/ossim-video)
   add_subdirectory(${OSSIM_DEV_HOME}/ossim-video ${CMAKE_CURRENT_BINARY_DIR}/ossim-video)
 ENDIF()
 
+IF(BUILD_OSSIM_MSP AND EXISTS ${OSSIM_DEV_HOME}/ossim-msp)
+  add_subdirectory(${OSSIM_DEV_HOME}/ossim-msp ${CMAKE_CURRENT_BINARY_DIR}/ossim-msp)
+ENDIF()
+
+IF(BUILD_OSSIM_ATP AND EXISTS ${OSSIM_DEV_HOME}/ossim-atp)
+  add_subdirectory(${OSSIM_DEV_HOME}/ossim-atp ${CMAKE_CURRENT_BINARY_DIR}/ossim-atp)
+ENDIF()
+
 IF(BUILD_OMS AND EXISTS ${OSSIM_DEV_HOME}/ossim-oms)
   IF(NOT OMS_LIBRARY)
      SET(OMS_LIBRARY "ossim-oms" CACHE STRING "Caching" FORCE)
@@ -122,6 +130,7 @@ IF(BUILD_OMS AND EXISTS ${OSSIM_DEV_HOME}/ossim-oms)
   ENDIF(NOT OMS_INCLUDE_DIR)
   add_subdirectory(${OSSIM_DEV_HOME}/ossim-oms ${CMAKE_CURRENT_BINARY_DIR}/ossim-oms)
 ENDIF()
+
 
 IF(BUILD_OSSIM_PLANET AND EXISTS ${OSSIM_DEV_HOME}/ossim-planet)
   
@@ -134,6 +143,18 @@ IF(BUILD_OSSIM_PLANET AND EXISTS ${OSSIM_DEV_HOME}/ossim-planet)
 
   add_subdirectory(${OSSIM_DEV_HOME}/ossim-planet ${CMAKE_CURRENT_BINARY_DIR}/ossim-planet)
 ENDIF()
+
+IF(BUILD_OSSIM_PLANET_GUI AND EXISTS ${OSSIM_DEV_HOME}/ossim-planet-gui)
+  IF(NOT OSSIMPLANETGUI_LIBRARY)
+     SET(OSSIMPLANETGUI_LIBRARY "ossim-planet-gui" CACHE STRING "Caching" FORCE)
+  ENDIF(NOT OSSIMPLANETGUI_LIBRARY)
+  IF(NOT OSSIMPLANETGUI_INCLUDE_DIR)
+     SET(OSSIMPLANETGUI_INCLUDE_DIR "${OSSIM_DEV_HOME}/ossim-planet-gui/include" CACHE STRING "Caching" FORCE)
+  ENDIF(NOT OSSIMPLANETGUI_INCLUDE_DIR)
+
+  add_subdirectory(${OSSIM_DEV_HOME}/ossim-planet-gui ${CMAKE_CURRENT_BINARY_DIR}/ossim-planet-gui)
+ENDIF()
+
 
 IF(BUILD_OSSIM_GUI AND EXISTS ${OSSIM_DEV_HOME}/ossim-gui)
      add_subdirectory(${OSSIM_DEV_HOME}/ossim-gui ${CMAKE_CURRENT_BINARY_DIR}/ossim-gui)
@@ -157,6 +178,11 @@ ENDIF()
 IF(BUILD_CSMAPI AND EXISTS ${OSSIM_DEV_HOME}/csmApi)
     add_subdirectory(${OSSIM_DEV_HOME}/csmApi ${CMAKE_CURRENT_BINARY_DIR}/csmApi)
 ENDIF()
+
+IF(BUILD_DSMG AND EXISTS ${OSSIM_DEV_HOME}/ossim-dsmg)
+  add_subdirectory(${OSSIM_DEV_HOME}/ossim-dsmg ${CMAKE_CURRENT_BINARY_DIR}/ossim-dsmg)
+ENDIF()
+
 
 ############################## Doxygen installation for current ossim core module ###########################################
 FIND_PACKAGE(Doxygen)
@@ -229,7 +255,7 @@ ENDIF()
 # INSTALL(FILES ${OSSIM_DEV_HOME}/ossim_package_support/fonts/times.ttf DESTINATION "share/ossim/fonts" COMPONENT ossim)
 
 FILE(GLOB ossim_cmake_modules ${OSSIM_DEV_HOME}/ossim/cmake/CMakeModules/*.cmake* )
-INSTALL(FILES ${ossim_cmake_modules} DESTINATION share/ossim/${OSSIM_VERSION}/CMakeModules COMPONENT ossim)
+INSTALL(FILES ${ossim_cmake_modules} DESTINATION share/ossim/CMakeModules COMPONENT ossim)
 
 FILE(GLOB projection_files "${OSSIM_HOME}/share/ossim/projection/*.csv"  "${OSSIM_HOME}/share/ossim/projection/*.txt")
 INSTALL(FILES ${projection_files} DESTINATION share/ossim/projection COMPONENT ossim)
@@ -333,4 +359,7 @@ MESSAGE( STATUS "BUILD_OSSIM_VIDEO               = ${BUILD_OSSIM_VIDEO}" )
 MESSAGE( STATUS "BUILD_OSSIM_WMS                 = ${BUILD_OSSIM_WMS}" )
 MESSAGE( STATUS "BUILD_LIBRARY_DIR               = ${BUILD_LIBRARY_DIR}" )
 MESSAGE( STATUS "BUILD_RUNTIME_DIR               = ${BUILD_RUNTIME_DIR}" )
+MESSAGE( STATUS "BUILD_DSMG                      = ${BUILD_DSMG}" )
+MESSAGE( STATUS "BUILD_OSSIM_MSP                 = ${BUILD_OSSIM_MSP}" )
+MESSAGE( STATUS "BUILD_OSSIM_ATP                 = ${BUILD_OSSIM_ATP}" )
 MESSAGE( STATUS "Use OSSIM_BUILD_ADDITIONAL_DIRECTORIES to add other cmake builds." )

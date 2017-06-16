@@ -451,6 +451,7 @@ ossimString ossimString::replaceStrThatMatch(const char *regularExpressionPatter
 bool ossimString::toBool()const
 {
    ossimString s = c_str();
+   s = s.trim();
    if (s.empty())
    {
       return false;

@@ -2580,7 +2580,7 @@ bool ossimNitfTileSource::setCurrentEntry(ossim_uint32 entryIdx)
             theOverviewFile.clear();
             
             theCurrentEntry = entryIdx;
-            
+            theOutputBandList.clear();
             //---
             // Since we were previously open and the the entry has changed we
             // need to reinitialize some things.
@@ -2758,7 +2758,7 @@ ossimRefPtr<ossimProperty> ossimNitfTileSource::getProperty(const ossimString& n
    {
       if(theNitfFile.valid())
       {
-         if(theNitfFile->getHeader())
+         if(getFileHeader())
          {
             ossimRefPtr<ossimProperty> p = theNitfFile->getHeader()->getProperty(name);
             if(p.valid())
@@ -2808,9 +2808,9 @@ void ossimNitfTileSource::getPropertyNames(std::vector<ossimString>& propertyNam
 {
    ossimImageHandler::getPropertyNames(propertyNames);
    propertyNames.push_back(ossimKeywordNames::ENABLE_CACHE_KW);
-   if(theNitfFile->getHeader())
+   if(getFileHeader())
    {
-      theNitfFile->getHeader()->getPropertyNames(propertyNames);
+      getFileHeader()->getPropertyNames(propertyNames);
    }
    const ossimNitfImageHeader* imageHeader = getCurrentImageHeader();
    if(imageHeader)

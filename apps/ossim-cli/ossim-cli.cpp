@@ -46,31 +46,35 @@ void usage(char* appName)
 
 bool runCommand(ossimArgumentParser& ap)
 {
-   bool status_ok = true;
    ossimString command = ap[1];
    ap.remove(1);
    ossimToolFactoryBase* factory = ossimToolRegistry::instance();
-   ossimRefPtr<ossimTool> utility = factory->createUtility(command);
+   ossimRefPtr<ossimTool> utility = factory->createTool(command);
 
    if (!utility.valid())
    {
       cout << "\nDid not understand command <"<<command<<">"<<endl;
       showAvailableCommands();
-      status_ok = false;
+      return false;
    }
-   else if (!utility->initialize(ap))
+
+   if (!utility->initialize(ap))
    {
       cout << "\nCould not execute command <"<<command<<"> with arguments and options "
             "provided."<<endl;
-      status_ok = false;
-   }
-   else if (!utility->execute())
-   {
-      cout << "\nAn error was encountered executing the command. Check options."<<endl;
-      status_ok = false;
+      return false;
    }
 
-   return status_ok;
+   if (utility->helpRequested())
+      return true;
+
+   if (!utility->execute())
+   {
+      cout << "\nAn error was encountered executing the command. Check options."<<endl;
+      return false;
+   }
+
+   return true;
 }
 
 int main(int argc, char *argv[])

@@ -26,16 +26,14 @@
 # $Id$
 
 # Find include path:
-find_path(OPENCV_INCLUDE_DIR opencv/cv.hpp PATHS /usr/include /usr/local/include)
+find_path(OPENCV_INCLUDE_DIR opencv/cv.h PATHS /home/okramer/dev/opencv-2.4.13.2)
 
 macro(FIND_OPENCV_LIBRARY MYLIBRARY MYLIBRARYNAME)
 
    find_library( ${MYLIBRARY}
       NAMES "${MYLIBRARYNAME}${OPENCV_RELEASE_POSTFIX}"
       PATHS
-      /usr/lib64
-      /usr/lib
-     /usr/local/lib
+      /home/okramer/dev/opencv-2.4.13.2/lib
    )
 
 endmacro(FIND_OPENCV_LIBRARY MYLIBRARY MYLIBRARYNAME)

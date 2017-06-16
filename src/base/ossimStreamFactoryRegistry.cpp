@@ -1,6 +1,6 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License: MIT
 //
 // Author: Garrett Potts
 //
@@ -30,37 +30,59 @@ ossim::StreamFactoryRegistry* ossim::StreamFactoryRegistry::instance()
    if(!m_instance)
    {
       m_instance = new ossim::StreamFactoryRegistry();
-
-      // Add factory from the core.
-      m_instance->registerFactory(ossim::StreamFactory::instance());
    }
-
    return m_instance;
 }
 
 std::shared_ptr<ossim::istream> ossim::StreamFactoryRegistry::createIstream(
-   const std::string& connectionString, std::ios_base::openmode openMode) const
+   const std::string& connectionString,
+   const ossimKeywordlist& options,
+   std::ios_base::openmode openMode) const
 {
    std::shared_ptr<ossim::istream> result(0);
    ossim_uint32 i = 0;
    for(i = 0; (i < m_factoryList.size())&&(!result); ++i)
    {
-      result = m_factoryList[i]->createIstream(connectionString, openMode);
+      result = m_factoryList[i]->createIstream(connectionString, options, openMode);
    }
    return result;
 }
       
 std::shared_ptr<ossim::ostream> ossim::StreamFactoryRegistry::createOstream(
-   const std::string& /*connectionString*/, std::ios_base::openmode /*openMode*/) const
+   const std::string& /*connectionString*/,
+   const ossimKeywordlist& /* options */,
+   std::ios_base::openmode /*openMode*/) const
 {
    std::shared_ptr<ossim::ostream> result(0);
    return result;
 }
 
 std::shared_ptr<ossim::iostream> ossim::StreamFactoryRegistry::createIOstream(
-   const std::string& /*connectionString*/, std::ios_base::openmode /*openMode*/) const
+   const std::string& /*connectionString*/,
+   const ossimKeywordlist& /* options */,
+   std::ios_base::openmode /*openMode*/) const
 {
    std::shared_ptr<ossim::iostream> result(0);
+   return result;
+}
+
+bool ossim::StreamFactoryRegistry::exists(const std::string& connectionString) const
+{
+   bool continueFlag = true;
+   return exists( connectionString, continueFlag );
+}
+
+bool ossim::StreamFactoryRegistry::exists(const std::string& connectionString,
+                                          bool& continueFlag) const
+{
+   bool result = false;
+   std::vector<ossim::StreamFactoryBase*>::const_iterator i = m_factoryList.begin();
+   while ( i != m_factoryList.end() )
+   {
+      result = (*i)->exists( connectionString, continueFlag );
+      if ( ( result == true ) || (continueFlag == false ) ) break;
+      ++i;
+   }
    return result;
 }
 
@@ -101,9 +123,7 @@ ossimStreamFactoryRegistry* ossimStreamFactoryRegistry::instance()
    if(!theInstance)
    {
       theInstance = new ossimStreamFactoryRegistry();
-      theInstance->registerFactory(ossimStreamFactory::instance());
    }
-
    return theInstance;
 }
 
